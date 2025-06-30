@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule - Teaching Management System</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-graduation-cap me-2"></i>
+                TMS Dashboard
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span id="currentUser">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="d-flex flex-column p-3">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="students.html" class="nav-link">
+                                <i class="fas fa-users me-2"></i>Students
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="courses.html" class="nav-link">
+                                <i class="fas fa-book me-2"></i>Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="assignments.html" class="nav-link">
+                                <i class="fas fa-tasks me-2"></i>Assignments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="attendance.html" class="nav-link">
+                                <i class="fas fa-calendar-check me-2"></i>Attendance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="schedule.html" class="nav-link active">
+                                <i class="fas fa-clock me-2"></i>Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link">
+                                <i class="fas fa-chart-bar me-2"></i>Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="container-fluid p-4">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2>Class Schedule Management</h2>
+                            <p class="text-muted">Organize and manage class schedules</p>
+                        </div>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                            <i class="fas fa-plus me-2"></i>Add Class
+                        </button>
+                    </div>
+
+                    <!-- Schedule Navigation -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label for="weekSelector" class="form-label">Select Week</label>
+                                    <input type="week" class="form-control" id="weekSelector">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="viewType" class="form-label">View</label>
+                                    <select class="form-select" id="viewType">
+                                        <option value="week">Week View</option>
+                                        <option value="day">Day View</option>
+                                        <option value="list">List View</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="filterInstructor" class="form-label">Instructor</label>
+                                    <select class="form-select" id="filterInstructor">
+                                        <option value="">All Instructors</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-primary w-100" onclick="loadSchedule()">
+                                        <i class="fas fa-refresh me-2"></i>Refresh
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Grid -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Weekly Schedule</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="scheduleGrid">
+                                <!-- Schedule will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Classes -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Today's Classes</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="todayClasses">
+                                        <!-- Today's classes will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Upcoming Classes</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="upcomingClasses">
+                                        <!-- Upcoming classes will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Schedule Modal -->
+    <div class="modal fade" id="addScheduleModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Class Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addScheduleForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="scheduleCourse" class="form-label">Course</label>
+                                <select class="form-select" id="scheduleCourse" required>
+                                    <option value="">Select Course</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="scheduleInstructor" class="form-label">Instructor</label>
+                                <input type="text" class="form-control" id="scheduleInstructor" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="scheduleDay" class="form-label">Day of Week</label>
+                                <select class="form-select" id="scheduleDay" required>
+                                    <option value="">Select Day</option>
+                                    <option value="monday">Monday</option>
+                                    <option value="tuesday">Tuesday</option>
+                                    <option value="wednesday">Wednesday</option>
+                                    <option value="thursday">Thursday</option>
+                                    <option value="friday">Friday</option>
+                                    <option value="saturday">Saturday</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="scheduleRoom" class="form-label">Room/Location</label>
+                                <input type="text" class="form-control" id="scheduleRoom" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="startTime" class="form-label">Start Time</label>
+                                <input type="time" class="form-control" id="startTime" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="endTime" class="form-label">End Time</label>
+                                <input type="time" class="form-control" id="endTime" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="scheduleType" class="form-label">Class Type</label>
+                                <select class="form-select" id="scheduleType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="lecture">Lecture</option>
+                                    <option value="lab">Lab</option>
+                                    <option value="tutorial">Tutorial</option>
+                                    <option value="seminar">Seminar</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="capacity" class="form-label">Capacity</label>
+                                <input type="number" class="form-control" id="capacity" min="1" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="scheduleNotes" class="form-label">Notes</label>
+                                <textarea class="form-control" id="scheduleNotes" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="isRecurring" checked>
+                                    <label class="form-check-label" for="isRecurring">
+                                        Recurring weekly class
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="addScheduleForm" class="btn btn-primary">Add to Schedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/mockData.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadCourseOptions();
+            loadInstructorOptions();
+            loadSchedule();
+            loadTodayClasses();
+            loadUpcomingClasses();
+            setupEventListeners();
+            
+            // Set current week
+            const today = new Date();
+            const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1));
+            const week = monday.toISOString().split('T')[0].split('-').slice(0, 2).join('-W') + 
+                        String(Math.ceil(monday.getDate() / 7)).padStart(2, '0');
+            document.getElementById('weekSelector').value = week;
+        });
+
+        function loadCourseOptions() {
+            const courses = getCourses();
+            const select = document.getElementById('scheduleCourse');
+            
+            select.innerHTML = '<option value="">Select Course</option>';
+            courses.forEach(course => {
+                select.innerHTML += `<option value="${course.name}">${course.name}</option>`;
+            });
+        }
+
+        function loadInstructorOptions() {
+            const courses = getCourses();
+            const instructors = [...new Set(courses.map(course => course.instructor))];
+            const select = document.getElementById('filterInstructor');
+            
+            select.innerHTML = '<option value="">All Instructors</option>';
+            instructors.forEach(instructor => {
+                select.innerHTML += `<option value="${instructor}">${instructor}</option>`;
+            });
+        }
+
+        function loadSchedule() {
+            const schedule = getSchedule();
+            const scheduleGrid = document.getElementById('scheduleGrid');
+            
+            // Create time slots for the day (8 AM to 6 PM)
+            const timeSlots = [];
+            for (let hour = 8; hour <= 18; hour++) {
+                timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
+            }
+            
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            
+            let gridHTML = `
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th width="100">Time</th>
+                                ${days.map(day => `<th>${day}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            timeSlots.forEach(time => {
+                gridHTML += `<tr><td class="fw-bold text-center">${time}</td>`;
+                
+                days.forEach(day => {
+                    const classAtTime = schedule.find(item => 
+                        item.day.toLowerCase() === day.toLowerCase() && 
+                        item.startTime === time
+                    );
+                    
+                    if (classAtTime) {
+                        gridHTML += `
+                            <td class="p-1">
+                                <div class="schedule-item bg-primary text-white p-2 rounded" onclick="viewScheduleDetails(${schedule.indexOf(classAtTime)})">
+                                    <div class="fw-bold">${classAtTime.course}</div>
+                                    <small>${classAtTime.instructor}</small><br>
+                                    <small><i class="fas fa-map-marker-alt"></i> ${classAtTime.room}</small>
+                                </div>
+                            </td>
+                        `;
+                    } else {
+                        gridHTML += '<td class="p-1"></td>';
+                    }
+                });
+                
+                gridHTML += '</tr>';
+            });
+            
+            gridHTML += '</tbody></table></div>';
+            scheduleGrid.innerHTML = gridHTML;
+        }
+
+        function loadTodayClasses() {
+            const schedule = getSchedule();
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            const todayClasses = schedule.filter(item => item.day.toLowerCase() === today);
+            
+            const container = document.getElementById('todayClasses');
+            
+            if (todayClasses.length === 0) {
+                container.innerHTML = '<p class="text-muted">No classes scheduled for today</p>';
+                return;
+            }
+            
+            container.innerHTML = todayClasses.map(classItem => `
+                <div class="d-flex align-items-center mb-3 p-2 border-start border-primary border-3">
+                    <div class="me-3">
+                        <i class="fas fa-clock text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${classItem.course}</div>
+                        <small class="text-muted">${classItem.startTime} - ${classItem.endTime}</small><br>
+                        <small class="text-muted"><i class="fas fa-map-marker-alt"></i> ${classItem.room}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadUpcomingClasses() {
+            const schedule = getSchedule();
+            const container = document.getElementById('upcomingClasses');
+            
+            // Get next 3 upcoming classes
+            const upcomingClasses = schedule.slice(0, 3);
+            
+            if (upcomingClasses.length === 0) {
+                container.innerHTML = '<p class="text-muted">No upcoming classes</p>';
+                return;
+            }
+            
+            container.innerHTML = upcomingClasses.map(classItem => `
+                <div class="d-flex align-items-center mb-3 p-2 border-start border-info border-3">
+                    <div class="me-3">
+                        <i class="fas fa-calendar text-info"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${classItem.course}</div>
+                        <small class="text-muted">${classItem.day} ${classItem.startTime} - ${classItem.endTime}</small><br>
+                        <small class="text-muted"><i class="fas fa-user"></i> ${classItem.instructor}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupEventListeners() {
+            document.getElementById('addScheduleForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addSchedule();
+            });
+
+            document.getElementById('viewType').addEventListener('change', function() {
+                loadSchedule();
+            });
+
+            document.getElementById('weekSelector').addEventListener('change', function() {
+                loadSchedule();
+            });
+
+            document.getElementById('filterInstructor').addEventListener('change', function() {
+                filterScheduleByInstructor();
+            });
+        }
+
+        function addSchedule() {
+            const newSchedule = {
+                course: document.getElementById('scheduleCourse').value,
+                instructor: document.getElementById('scheduleInstructor').value,
+                day: document.getElementById('scheduleDay').value,
+                room: document.getElementById('scheduleRoom').value,
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value,
+                type: document.getElementById('scheduleType').value,
+                capacity: parseInt(document.getElementById('capacity').value),
+                notes: document.getElementById('scheduleNotes').value,
+                recurring: document.getElementById('isRecurring').checked
+            };
+
+            const schedule = getSchedule();
+            
+            // Check for conflicts
+            const conflict = schedule.find(item => 
+                item.day === newSchedule.day && 
+                item.room === newSchedule.room &&
+                timeOverlaps(item.startTime, item.endTime, newSchedule.startTime, newSchedule.endTime)
+            );
+
+            if (conflict) {
+                showAlert('Schedule conflict detected! Room is already booked at this time.', 'warning');
+                return;
+            }
+
+            schedule.push(newSchedule);
+            localStorage.setItem('schedule', JSON.stringify(schedule));
+            
+            bootstrap.Modal.getInstance(document.getElementById('addScheduleModal')).hide();
+            document.getElementById('addScheduleForm').reset();
+            loadSchedule();
+            loadTodayClasses();
+            loadUpcomingClasses();
+            showAlert('Class scheduled successfully!', 'success');
+        }
+
+        function timeOverlaps(start1, end1, start2, end2) {
+            return start1 < end2 && start2 < end1;
+        }
+
+        function viewScheduleDetails(index) {
+            const schedule = getSchedule();
+            const classItem = schedule[index];
+            
+            const details = `
+                <div class="schedule-details">
+                    <h5>${classItem.course}</h5>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>Instructor:</strong> ${classItem.instructor}</div>
+                        <div class="col-md-6"><strong>Room:</strong> ${classItem.room}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>Day:</strong> ${classItem.day}</div>
+                        <div class="col-md-6"><strong>Time:</strong> ${classItem.startTime} - ${classItem.endTime}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>Type:</strong> ${classItem.type}</div>
+                        <div class="col-md-6"><strong>Capacity:</strong> ${classItem.capacity} students</div>
+                    </div>
+                    ${classItem.notes ? `<div class="mt-3"><strong>Notes:</strong><br>${classItem.notes}</div>` : ''}
+                    <div class="mt-3">
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="editSchedule(${index})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSchedule(${index})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            showAlert(details, 'info', false);
+        }
+
+        function editSchedule(index) {
+            showAlert('Edit schedule functionality will be implemented', 'info');
+        }
+
+        function deleteSchedule(index) {
+            if (confirm('Are you sure you want to delete this class from the schedule?')) {
+                const schedule = getSchedule();
+                schedule.splice(index, 1);
+                localStorage.setItem('schedule', JSON.stringify(schedule));
+                loadSchedule();
+                loadTodayClasses();
+                loadUpcomingClasses();
+                showAlert('Class removed from schedule successfully!', 'success');
+            }
+        }
+
+        function filterScheduleByInstructor() {
+            const instructor = document.getElementById('filterInstructor').value;
+            const schedule = getSchedule();
+            
+            if (!instructor) {
+                loadSchedule();
+                return;
+            }
+
+            const filteredSchedule = schedule.filter(item => item.instructor === instructor);
+            
+            // Update the schedule grid with filtered data
+            // This is a simplified version - in a real app, you'd want to update the grid properly
+            showAlert(`Showing schedule for ${instructor}`, 'info');
+        }
+    </script>
+</body>
+</html>

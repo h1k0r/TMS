@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Teaching Management System</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-graduation-cap me-2"></i>
+                TMS Dashboard
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span id="currentUser">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="d-flex flex-column p-3">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="students.html" class="nav-link">
+                                <i class="fas fa-users me-2"></i>Students
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="courses.html" class="nav-link active">
+                                <i class="fas fa-book me-2"></i>Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="assignments.html" class="nav-link">
+                                <i class="fas fa-tasks me-2"></i>Assignments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="attendance.html" class="nav-link">
+                                <i class="fas fa-calendar-check me-2"></i>Attendance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="schedule.html" class="nav-link">
+                                <i class="fas fa-clock me-2"></i>Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link">
+                                <i class="fas fa-chart-bar me-2"></i>Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="container-fluid p-4">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2>Course Management</h2>
+                            <p class="text-muted">Create and manage academic courses</p>
+                        </div>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                            <i class="fas fa-plus me-2"></i>Add Course
+                        </button>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="searchCourse" placeholder="Search courses...">
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="filterDepartment">
+                                        <option value="">All Departments</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="filterStatus">
+                                        <option value="">All Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="completed">Completed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-outline-secondary w-100" onclick="resetFilters()">
+                                        <i class="fas fa-refresh me-2"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Courses Grid -->
+                    <div class="row g-4" id="coursesGrid">
+                        <!-- Courses will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Course</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCourseForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="courseCode" class="form-label">Course Code</label>
+                                <input type="text" class="form-control" id="courseCode" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="courseName" class="form-label">Course Name</label>
+                                <input type="text" class="form-control" id="courseName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="department" class="form-label">Department</label>
+                                <select class="form-select" id="department" required>
+                                    <option value="">Select Department</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="credits" class="form-label">Credits</label>
+                                <input type="number" class="form-control" id="credits" min="1" max="10" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="instructor" class="form-label">Instructor</label>
+                                <input type="text" class="form-control" id="instructor" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="semester" class="form-label">Semester</label>
+                                <select class="form-select" id="semester" required>
+                                    <option value="">Select Semester</option>
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="duration" class="form-label">Duration (weeks)</label>
+                                <input type="number" class="form-control" id="duration" min="1" max="52" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="courseStatus" class="form-label">Status</label>
+                                <select class="form-select" id="courseStatus" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="4"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="prerequisites" class="form-label">Prerequisites</label>
+                                <textarea class="form-control" id="prerequisites" rows="2" placeholder="List any prerequisite courses"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="addCourseForm" class="btn btn-primary">Add Course</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div class="modal fade" id="editCourseModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Course</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCourseForm">
+                        <input type="hidden" id="editCourseIndex">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="editCourseCode" class="form-label">Course Code</label>
+                                <input type="text" class="form-control" id="editCourseCode" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editCourseName" class="form-label">Course Name</label>
+                                <input type="text" class="form-control" id="editCourseName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editDepartment" class="form-label">Department</label>
+                                <select class="form-select" id="editDepartment" required>
+                                    <option value="">Select Department</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editCredits" class="form-label">Credits</label>
+                                <input type="number" class="form-control" id="editCredits" min="1" max="10" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editInstructor" class="form-label">Instructor</label>
+                                <input type="text" class="form-control" id="editInstructor" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editSemester" class="form-label">Semester</label>
+                                <select class="form-select" id="editSemester" required>
+                                    <option value="">Select Semester</option>
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editDuration" class="form-label">Duration (weeks)</label>
+                                <input type="number" class="form-control" id="editDuration" min="1" max="52" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editCourseStatus" class="form-label">Status</label>
+                                <select class="form-select" id="editCourseStatus" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="editDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="editDescription" rows="4"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="editPrerequisites" class="form-label">Prerequisites</label>
+                                <textarea class="form-control" id="editPrerequisites" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="editCourseForm" class="btn btn-primary">Update Course</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/mockData.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadCourses();
+            setupEventListeners();
+        });
+
+        function loadCourses() {
+            const courses = getCourses();
+            const coursesGrid = document.getElementById('coursesGrid');
+            
+            coursesGrid.innerHTML = courses.map((course, index) => `
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">${course.code}</h6>
+                            <span class="badge bg-${course.status === 'active' ? 'success' : course.status === 'inactive' ? 'warning' : 'secondary'}">
+                                ${course.status.charAt(0).toUpperCase() + course.status.slice(1)}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${course.name}</h5>
+                            <p class="card-text text-muted">${course.description}</p>
+                            <div class="row text-center mb-3">
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Credits</small>
+                                    <strong>${course.credits}</strong>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Semester</small>
+                                    <strong>${course.semester}</strong>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Duration</small>
+                                    <strong>${course.duration}w</strong>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <small class="text-muted">Department:</small>
+                                <span class="badge bg-info ms-1">${course.department}</span>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted">Instructor:</small>
+                                <strong class="ms-1">${course.instructor}</strong>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-outline-primary" onclick="editCourse(${index})">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </button>
+                                <button class="btn btn-outline-info" onclick="viewCourseDetails(${index})">
+                                    <i class="fas fa-eye me-1"></i>View
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteCourse(${index})">
+                                    <i class="fas fa-trash me-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupEventListeners() {
+            // Add course form
+            document.getElementById('addCourseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addCourse();
+            });
+
+            // Edit course form
+            document.getElementById('editCourseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateCourse();
+            });
+
+            // Search and filter functionality
+            document.getElementById('searchCourse').addEventListener('input', filterCourses);
+            document.getElementById('filterDepartment').addEventListener('change', filterCourses);
+            document.getElementById('filterStatus').addEventListener('change', filterCourses);
+        }
+
+        function addCourse() {
+            const newCourse = {
+                code: document.getElementById('courseCode').value,
+                name: document.getElementById('courseName').value,
+                department: document.getElementById('department').value,
+                credits: parseInt(document.getElementById('credits').value),
+                instructor: document.getElementById('instructor').value,
+                semester: document.getElementById('semester').value,
+                duration: parseInt(document.getElementById('duration').value),
+                status: document.getElementById('courseStatus').value,
+                description: document.getElementById('description').value,
+                prerequisites: document.getElementById('prerequisites').value
+            };
+
+            const courses = getCourses();
+            courses.push(newCourse);
+            localStorage.setItem('courses', JSON.stringify(courses));
+            
+            bootstrap.Modal.getInstance(document.getElementById('addCourseModal')).hide();
+            document.getElementById('addCourseForm').reset();
+            loadCourses();
+            showAlert('Course added successfully!', 'success');
+        }
+
+        function editCourse(index) {
+            const courses = getCourses();
+            const course = courses[index];
+            
+            document.getElementById('editCourseIndex').value = index;
+            document.getElementById('editCourseCode').value = course.code;
+            document.getElementById('editCourseName').value = course.name;
+            document.getElementById('editDepartment').value = course.department;
+            document.getElementById('editCredits').value = course.credits;
+            document.getElementById('editInstructor').value = course.instructor;
+            document.getElementById('editSemester').value = course.semester;
+            document.getElementById('editDuration').value = course.duration;
+            document.getElementById('editCourseStatus').value = course.status;
+            document.getElementById('editDescription').value = course.description;
+            document.getElementById('editPrerequisites').value = course.prerequisites;
+            
+            new bootstrap.Modal(document.getElementById('editCourseModal')).show();
+        }
+
+        function updateCourse() {
+            const index = document.getElementById('editCourseIndex').value;
+            const courses = getCourses();
+            
+            courses[index] = {
+                code: document.getElementById('editCourseCode').value,
+                name: document.getElementById('editCourseName').value,
+                department: document.getElementById('editDepartment').value,
+                credits: parseInt(document.getElementById('editCredits').value),
+                instructor: document.getElementById('editInstructor').value,
+                semester: document.getElementById('editSemester').value,
+                duration: parseInt(document.getElementById('editDuration').value),
+                status: document.getElementById('editCourseStatus').value,
+                description: document.getElementById('editDescription').value,
+                prerequisites: document.getElementById('editPrerequisites').value
+            };
+            
+            localStorage.setItem('courses', JSON.stringify(courses));
+            bootstrap.Modal.getInstance(document.getElementById('editCourseModal')).hide();
+            loadCourses();
+            showAlert('Course updated successfully!', 'success');
+        }
+
+        function deleteCourse(index) {
+            if (confirm('Are you sure you want to delete this course?')) {
+                const courses = getCourses();
+                courses.splice(index, 1);
+                localStorage.setItem('courses', JSON.stringify(courses));
+                loadCourses();
+                showAlert('Course deleted successfully!', 'success');
+            }
+        }
+
+        function viewCourseDetails(index) {
+            const courses = getCourses();
+            const course = courses[index];
+            
+            const detailsHtml = `
+                <div class="course-details">
+                    <h4>${course.name} (${course.code})</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Department:</strong> ${course.department}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Instructor:</strong> ${course.instructor}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Credits:</strong> ${course.credits}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Semester:</strong> ${course.semester}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Duration:</strong> ${course.duration} weeks
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Description:</strong>
+                        <p>${course.description}</p>
+                    </div>
+                    ${course.prerequisites ? `
+                    <div class="mb-3">
+                        <strong>Prerequisites:</strong>
+                        <p>${course.prerequisites}</p>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            showAlert(detailsHtml, 'info', false);
+        }
+
+        function filterCourses() {
+            const searchTerm = document.getElementById('searchCourse').value.toLowerCase();
+            const departmentFilter = document.getElementById('filterDepartment').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            const courses = getCourses();
+            const filteredCourses = courses.filter(course => {
+                const matchesSearch = 
+                    course.name.toLowerCase().includes(searchTerm) ||
+                    course.code.toLowerCase().includes(searchTerm) ||
+                    course.instructor.toLowerCase().includes(searchTerm);
+                
+                const matchesDepartment = !departmentFilter || course.department === departmentFilter;
+                const matchesStatus = !statusFilter || course.status === statusFilter;
+                
+                return matchesSearch && matchesDepartment && matchesStatus;
+            });
+            
+            const coursesGrid = document.getElementById('coursesGrid');
+            coursesGrid.innerHTML = filteredCourses.map((course, originalIndex) => {
+                const actualIndex = courses.indexOf(course);
+                return `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">${course.code}</h6>
+                                <span class="badge bg-${course.status === 'active' ? 'success' : course.status === 'inactive' ? 'warning' : 'secondary'}">
+                                    ${course.status.charAt(0).toUpperCase() + course.status.slice(1)}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${course.name}</h5>
+                                <p class="card-text text-muted">${course.description}</p>
+                                <div class="row text-center mb-3">
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Credits</small>
+                                        <strong>${course.credits}</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Semester</small>
+                                        <strong>${course.semester}</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Duration</small>
+                                        <strong>${course.duration}w</strong>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Department:</small>
+                                    <span class="badge bg-info ms-1">${course.department}</span>
+                                </div>
+                                <div class="mb-3">
+                                    <small class="text-muted">Instructor:</small>
+                                    <strong class="ms-1">${course.instructor}</strong>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-outline-primary" onclick="editCourse(${actualIndex})">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="viewCourseDetails(${actualIndex})">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </button>
+                                    <button class="btn btn-outline-danger" onclick="deleteCourse(${actualIndex})">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function resetFilters() {
+            document.getElementById('searchCourse').value = '';
+            document.getElementById('filterDepartment').value = '';
+            document.getElementById('filterStatus').value = '';
+            loadCourses();
+        }
+    </script>
+</body>
+</html>

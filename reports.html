@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Teaching Management System</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-graduation-cap me-2"></i>
+                TMS Dashboard
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span id="currentUser">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="d-flex flex-column p-3">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="students.html" class="nav-link">
+                                <i class="fas fa-users me-2"></i>Students
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="courses.html" class="nav-link">
+                                <i class="fas fa-book me-2"></i>Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="assignments.html" class="nav-link">
+                                <i class="fas fa-tasks me-2"></i>Assignments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="attendance.html" class="nav-link">
+                                <i class="fas fa-calendar-check me-2"></i>Attendance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="schedule.html" class="nav-link">
+                                <i class="fas fa-clock me-2"></i>Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="reports.html" class="nav-link active">
+                                <i class="fas fa-chart-bar me-2"></i>Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="container-fluid p-4">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2>Academic Reports & Analytics</h2>
+                            <p class="text-muted">Comprehensive insights and performance analytics</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-download me-2"></i>Export Reports
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="exportReport('pdf')">
+                                    <i class="fas fa-file-pdf me-2"></i>Export as PDF
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportReport('excel')">
+                                    <i class="fas fa-file-excel me-2"></i>Export as Excel
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="exportReport('csv')">
+                                    <i class="fas fa-file-csv me-2"></i>Export as CSV
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Report Filters -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="reportPeriod" class="form-label">Report Period</label>
+                                    <select class="form-select" id="reportPeriod">
+                                        <option value="week">This Week</option>
+                                        <option value="month" selected>This Month</option>
+                                        <option value="semester">This Semester</option>
+                                        <option value="year">This Year</option>
+                                        <option value="custom">Custom Range</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="reportType" class="form-label">Report Type</label>
+                                    <select class="form-select" id="reportType">
+                                        <option value="overview">Overview</option>
+                                        <option value="attendance">Attendance</option>
+                                        <option value="performance">Performance</option>
+                                        <option value="courses">Course Analytics</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="reportCourse" class="form-label">Course Filter</label>
+                                    <select class="form-select" id="reportCourse">
+                                        <option value="">All Courses</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-outline-primary w-100" onclick="generateReports()">
+                                        <i class="fas fa-chart-line me-2"></i>Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-3">
+                            <div class="card text-center border-primary">
+                                <div class="card-body">
+                                    <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                                    <h4 class="card-title" id="totalEnrollments">0</h4>
+                                    <p class="card-text">Total Enrollments</p>
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-up"></i> +5% from last month
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center border-success">
+                                <div class="card-body">
+                                    <i class="fas fa-percentage fa-2x text-success mb-2"></i>
+                                    <h4 class="card-title" id="overallAttendance">0%</h4>
+                                    <p class="card-text">Overall Attendance</p>
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-up"></i> +2% from last month
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center border-warning">
+                                <div class="card-body">
+                                    <i class="fas fa-graduation-cap fa-2x text-warning mb-2"></i>
+                                    <h4 class="card-title" id="avgGrade">0</h4>
+                                    <p class="card-text">Average Grade</p>
+                                    <small class="text-warning">
+                                        <i class="fas fa-minus"></i> Stable
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center border-info">
+                                <div class="card-body">
+                                    <i class="fas fa-tasks fa-2x text-info mb-2"></i>
+                                    <h4 class="card-title" id="completionRate">0%</h4>
+                                    <p class="card-text">Assignment Completion</p>
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-up"></i> +8% from last month
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row 1 -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Attendance Trends</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="attendanceChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Grade Distribution</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="gradeChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row 2 -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Course Performance Overview</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="performanceChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Student Status</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="statusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Reports -->
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Top Performing Students</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="topStudents">
+                                        <!-- Top students will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Course Completion Rates</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="courseCompletion">
+                                        <!-- Course completion data will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Analysis -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Detailed Attendance Analysis</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Course</th>
+                                                    <th>Total Classes</th>
+                                                    <th>Avg Attendance</th>
+                                                    <th>Best Day</th>
+                                                    <th>Lowest Day</th>
+                                                    <th>Trend</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="attendanceAnalysisTable">
+                                                <!-- Attendance analysis will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/mockData.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadCourseOptions();
+            generateReports();
+            initializeCharts();
+            loadDetailedReports();
+        });
+
+        function loadCourseOptions() {
+            const courses = getCourses();
+            const select = document.getElementById('reportCourse');
+            
+            select.innerHTML = '<option value="">All Courses</option>';
+            courses.forEach(course => {
+                select.innerHTML += `<option value="${course.name}">${course.name}</option>`;
+            });
+        }
+
+        function generateReports() {
+            updateKeyMetrics();
+            updateCharts();
+            loadDetailedReports();
+        }
+
+        function updateKeyMetrics() {
+            const students = getStudents();
+            const attendance = getAttendance();
+            const assignments = getAssignments();
+            
+            // Calculate metrics
+            const totalEnrollments = students.length;
+            const totalAttendanceRecords = attendance.length;
+            const presentRecords = attendance.filter(record => record.present).length;
+            const overallAttendance = totalAttendanceRecords > 0 ? Math.round((presentRecords / totalAttendanceRecords) * 100) : 0;
+            
+            // Mock grade average (in real app, this would come from grades data)
+            const avgGrade = 78.5;
+            
+            // Mock completion rate
+            const completionRate = 85;
+            
+            document.getElementById('totalEnrollments').textContent = totalEnrollments;
+            document.getElementById('overallAttendance').textContent = overallAttendance + '%';
+            document.getElementById('avgGrade').textContent = avgGrade.toFixed(1);
+            document.getElementById('completionRate').textContent = completionRate + '%';
+        }
+
+        function initializeCharts() {
+            createAttendanceChart();
+            createGradeChart();
+            createPerformanceChart();
+            createStatusChart();
+        }
+
+        function createAttendanceChart() {
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: [85, 88, 82, 90, 87, 89],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function createGradeChart() {
+            const ctx = document.getElementById('gradeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A (90-100)', 'B (80-89)', 'C (70-79)', 'D (60-69)', 'F (<60)'],
+                    datasets: [{
+                        data: [25, 35, 25, 10, 5],
+                        backgroundColor: [
+                            '#28a745',
+                            '#007bff',
+                            '#ffc107',
+                            '#fd7e14',
+                            '#dc3545'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            const courses = getCourses();
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: courses.slice(0, 6).map(course => course.name),
+                    datasets: [
+                        {
+                            label: 'Attendance %',
+                            data: [88, 92, 85, 79, 90, 87],
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Assignment Completion %',
+                            data: [85, 88, 82, 75, 89, 84],
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function createStatusChart() {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            const students = getStudents();
+            
+            const statusCounts = students.reduce((acc, student) => {
+                acc[student.status] = (acc[student.status] || 0) + 1;
+                return acc;
+            }, {});
+            
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(statusCounts).map(status => 
+                        status.charAt(0).toUpperCase() + status.slice(1)
+                    ),
+                    datasets: [{
+                        data: Object.values(statusCounts),
+                        backgroundColor: [
+                            '#28a745',
+                            '#ffc107',
+                            '#6c757d'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadDetailedReports() {
+            loadTopStudents();
+            loadCourseCompletion();
+            loadAttendanceAnalysis();
+        }
+
+        function loadTopStudents() {
+            const students = getStudents();
+            const container = document.getElementById('topStudents');
+            
+            // Mock performance data
+            const topStudents = students.slice(0, 5).map((student, index) => ({
+                ...student,
+                grade: (95 - index * 2).toFixed(1),
+                attendance: (98 - index * 1).toFixed(1)
+            }));
+            
+            container.innerHTML = topStudents.map((student, index) => `
+                <div class="d-flex align-items-center mb-3 p-2 ${index === 0 ? 'bg-success bg-opacity-10 border border-success rounded' : ''}">
+                    <div class="me-3">
+                        <span class="badge bg-primary rounded-pill">${index + 1}</span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${student.firstName} ${student.lastName}</div>
+                        <small class="text-muted">${student.course}</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold text-success">${student.grade}%</div>
+                        <small class="text-muted">${student.attendance}% attendance</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadCourseCompletion() {
+            const courses = getCourses();
+            const container = document.getElementById('courseCompletion');
+            
+            container.innerHTML = courses.slice(0, 5).map((course, index) => {
+                const completion = 85 + Math.random() * 15;
+                return `
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-medium">${course.name}</span>
+                            <span class="text-muted">${completion.toFixed(1)}%</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-${completion > 90 ? 'success' : completion > 80 ? 'primary' : 'warning'}" 
+                                 style="width: ${completion}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadAttendanceAnalysis() {
+            const courses = getCourses();
+            const tableBody = document.getElementById('attendanceAnalysisTable');
+            
+            tableBody.innerHTML = courses.slice(0, 5).map(course => {
+                const avgAttendance = 80 + Math.random() * 20;
+                const trend = Math.random() > 0.5 ? 'up' : 'down';
+                
+                return `
+                    <tr>
+                        <td class="fw-medium">${course.name}</td>
+                        <td>24</td>
+                        <td>
+                            <span class="badge bg-${avgAttendance > 85 ? 'success' : avgAttendance > 75 ? 'primary' : 'warning'}">
+                                ${avgAttendance.toFixed(1)}%
+                            </span>
+                        </td>
+                        <td>Monday (92%)</td>
+                        <td>Friday (${(avgAttendance - 10).toFixed(1)}%)</td>
+                        <td>
+                            <i class="fas fa-arrow-${trend} text-${trend === 'up' ? 'success' : 'danger'}"></i>
+                            <span class="text-${trend === 'up' ? 'success' : 'danger'}">${trend === 'up' ? '+' : '-'}${Math.floor(Math.random() * 5) + 1}%</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateCharts() {
+            // In a real application, this would fetch new data and update all charts
+            showAlert('Charts updated with latest data', 'info');
+        }
+
+        function exportReport(format) {
+            showAlert(`Exporting report as ${format.toUpperCase()}...`, 'info');
+            
+            // Simulate export process
+            setTimeout(() => {
+                showAlert(`Report exported successfully as ${format.toUpperCase()}`, 'success');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

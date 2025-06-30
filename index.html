@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching Management System - BCA Project</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Teaching Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Welcome to Teaching Management System</h1>
+                    <p class="lead mb-4">A comprehensive solution for managing students, courses, assignments, and academic activities. Built for modern educational institutions.</p>
+                    <div class="d-flex gap-3">
+                        <a href="login.html" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Get Started
+                        </a>
+                        <a href="#features" class="btn btn-outline-secondary btn-lg">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="text-center">
+                        <svg width="400" height="300" viewBox="0 0 400 300" class="hero-illustration">
+                            <rect x="50" y="50" width="300" height="200" rx="10" fill="var(--bs-primary)" opacity="0.1"/>
+                            <circle cx="120" cy="120" r="30" fill="var(--bs-success)"/>
+                            <rect x="170" y="100" width="150" height="8" fill="var(--bs-info)"/>
+                            <rect x="170" y="120" width="120" height="8" fill="var(--bs-warning)"/>
+                            <rect x="170" y="140" width="100" height="8" fill="var(--bs-secondary)"/>
+                            <rect x="70" y="180" width="260" height="50" rx="5" fill="var(--bs-dark)" opacity="0.2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Comprehensive Features</h2>
+                <p class="lead text-muted">Everything you need to manage your educational institution</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-users fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Student Management</h5>
+                            <p class="card-text">Complete student enrollment, profile management, and academic tracking system.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-book fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title">Course Management</h5>
+                            <p class="card-text">Create and manage courses, syllabus, and academic content efficiently.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-tasks fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="card-title">Assignment System</h5>
+                            <p class="card-text">Assignment creation, submission tracking, and automated grading system.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-calendar-check fa-3x text-info"></i>
+                            </div>
+                            <h5 class="card-title">Attendance Tracking</h5>
+                            <p class="card-text">Real-time attendance monitoring with detailed analytics and reports.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-clock fa-3x text-danger"></i>
+                            </div>
+                            <h5 class="card-title">Class Scheduling</h5>
+                            <p class="card-text">Intelligent class scheduling with conflict detection and optimization.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-chart-bar fa-3x text-secondary"></i>
+                            </div>
+                            <h5 class="card-title">Analytics & Reports</h5>
+                            <p class="card-text">Comprehensive academic analytics and detailed performance reports.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-5 bg-dark">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-white">Development Team</h2>
+                <p class="lead text-light">BCA Final Year Project Team</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card bg-secondary text-center">
+                        <div class="card-body">
+                            <div class="avatar mb-3">
+                                <i class="fas fa-user-circle fa-4x text-primary"></i>
+                            </div>
+                            <h6 class="card-title text-white">TUNU KUMAR</h6>
+                            <small class="text-light">Developer</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card bg-secondary text-center">
+                        <div class="card-body">
+                            <div class="avatar mb-3">
+                                <i class="fas fa-user-circle fa-4x text-success"></i>
+                            </div>
+                            <h6 class="card-title text-white">PUSHKAR KUMAR</h6>
+                            <small class="text-light">Developer</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card bg-secondary text-center">
+                        <div class="card-body">
+                            <div class="avatar mb-3">
+                                <i class="fas fa-user-circle fa-4x text-warning"></i>
+                            </div>
+                            <h6 class="card-title text-white">RITESH KUMAR</h6>
+                            <small class="text-light">Developer</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card bg-secondary text-center">
+                        <div class="card-body">
+                            <div class="avatar mb-3">
+                                <i class="fas fa-user-circle fa-4x text-info"></i>
+                            </div>
+                            <h6 class="card-title text-white">CHITRANJAN KUMAR</h6>
+                            <small class="text-light">Developer</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card bg-secondary text-center">
+                        <div class="card-body">
+                            <div class="avatar mb-3">
+                                <i class="fas fa-user-circle fa-4x text-danger"></i>
+                            </div>
+                            <h6 class="card-title text-white">SHUBHAM KUMAR</h6>
+                            <small class="text-light">Developer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 Teaching Management System. BCA Final Year Project.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>Ready for XAMPP MySQL Integration</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
